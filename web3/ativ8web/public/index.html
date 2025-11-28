@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Ordens de Serviço</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🏢 Sistema de Ordens de Serviço</h1>
+        <p>Gerenciamento Corporativo de Solicitações de Serviço</p>
+      </header>
+
+      <div class="alert" id="alert"></div>
+
+      <!-- Formulário de Ordem de Serviço -->
+      <section class="form-section">
+        <h2 id="form-title">➕ Adicionar Nova Ordem de Serviço</h2>
+        <form id="event-form">
+          <input type="hidden" id="event-id" />
+
+          <div class="form-group">
+            <label for="titulo">Título *</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              required
+              placeholder="Título da ordem de serviço"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="descricao">Descrição *</label>
+            <textarea
+              id="descricao"
+              name="descricao"
+              rows="3"
+              required
+              placeholder="Descrição detalhada do serviço"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prioridade">Prioridade *</label>
+              <select id="prioridade" name="prioridade" required>
+                <option value="baixa">Baixa</option>
+                <option value="média" selected>Média</option>
+                <option value="alta">Alta</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="setorSolicitante">Setor Solicitante *</label>
+              <input
+                type="text"
+                id="setorSolicitante"
+                name="setorSolicitante"
+                required
+                placeholder="Ex: TI, Facilities, RH"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="responsavel">Responsável</label>
+              <input
+                type="text"
+                id="responsavel"
+                name="responsavel"
+                placeholder="Nome do responsável (opcional)"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="valorServico">Valor do Serviço (R$) *</label>
+              <input
+                type="number"
+                id="valorServico"
+                name="valorServico"
+                step="0.01"
+                min="0"
+                required
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prazoEstimado">Prazo Estimado</label>
+            <input
+              type="datetime-local"
+              id="prazoEstimado"
+              name="prazoEstimado"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              Adicionar Ordem
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancel-btn"
+              style="display: none"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Busca de Ordens -->
+      <section class="search-section">
+        <h2>🔍 Pesquisar Ordens de Serviço</h2>
+        <div class="search-box">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Buscar por título..."
+          />
+          <button class="btn btn-primary" id="search-btn">Buscar</button>
+          <button class="btn btn-secondary" id="clear-search-btn">
+            Limpar
+          </button>
+        </div>
+      </section>
+
+      <!-- Lista de Ordens -->
+      <section class="events-section">
+        <h2>📋 Lista de Ordens de Serviço</h2>
+        <div id="events-list" class="events-list">
+          <p class="loading">Carregando ordens...</p>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
