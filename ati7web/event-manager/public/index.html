@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de Eventos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📅 Gerenciador de Eventos</h1>
+        <p>Sistema de gerenciamento de eventos com TypeScript e MongoDB</p>
+      </header>
+
+      <div class="alert" id="alert"></div>
+
+      <!-- Formulário de Evento -->
+      <section class="form-section">
+        <h2 id="form-title">➕ Adicionar Novo Evento</h2>
+        <form id="event-form">
+          <input type="hidden" id="event-id" />
+
+          <div class="form-group">
+            <label for="titulo">Título *</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              required
+              placeholder="Nome do evento"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea
+              id="descricao"
+              name="descricao"
+              rows="3"
+              placeholder="Descrição do evento (opcional)"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="data">Data *</label>
+              <input type="datetime-local" id="data" name="data" required />
+            </div>
+
+            <div class="form-group">
+              <label for="valor">Valor (R$) *</label>
+              <input
+                type="number"
+                id="valor"
+                name="valor"
+                step="0.01"
+                min="0"
+                required
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="local">Local *</label>
+            <input
+              type="text"
+              id="local"
+              name="local"
+              required
+              placeholder="Local do evento"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              Adicionar Evento
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancel-btn"
+              style="display: none"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Busca de Eventos -->
+      <section class="search-section">
+        <h2>🔍 Pesquisar Eventos</h2>
+        <div class="search-box">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Buscar por título..."
+          />
+          <button class="btn btn-primary" id="search-btn">Buscar</button>
+          <button class="btn btn-secondary" id="clear-search-btn">
+            Limpar
+          </button>
+        </div>
+      </section>
+
+      <!-- Lista de Eventos -->
+      <section class="events-section">
+        <h2>📋 Lista de Eventos</h2>
+        <div id="events-list" class="events-list">
+          <p class="loading">Carregando eventos...</p>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
