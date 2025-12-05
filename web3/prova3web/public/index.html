@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Reservas de Mesa</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🍽️ Sistema de Reservas de Mesa</h1>
+        <p>Gerenciamento de Reservas do Restaurante</p>
+      </header>
+
+      <div class="main-content">
+        <!-- Mapa Visual das Mesas -->
+        <section class="map-section">
+          <h2>Mapa de Mesas</h2>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="salão">Salão</button>
+            <button class="filter-btn" data-filter="varanda">Varanda</button>
+            <button class="filter-btn" data-filter="área interna">
+              Área Interna
+            </button>
+          </div>
+          <div class="legend">
+            <div class="legend-item">
+              <span class="legend-color disponivel"></span>
+              <span>Disponível</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color reservado"></span>
+              <span>Reservado</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color ocupado"></span>
+              <span>Ocupado</span>
+            </div>
+          </div>
+          <div id="mesas-map" class="mesas-container"></div>
+        </section>
+
+        <!-- Seção de Reservas -->
+        <section class="reservas-section">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="listar">
+              Minhas Reservas
+            </button>
+            <button class="tab-btn" data-tab="criar">Nova Reserva</button>
+          </div>
+
+          <!-- Tab: Listar Reservas -->
+          <div id="listar-tab" class="tab-content active">
+            <div class="filters">
+              <input
+                type="text"
+                id="filter-cliente"
+                placeholder="Filtrar por cliente..."
+              />
+              <select id="filter-status">
+                <option value="">Todos os status</option>
+                <option value="reservado">Reservado</option>
+                <option value="ocupado">Ocupado</option>
+                <option value="finalizado">Finalizado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+              <button id="btn-filtrar" class="btn btn-secondary">
+                Filtrar
+              </button>
+              <button id="btn-limpar-filtros" class="btn btn-secondary">
+                Limpar
+              </button>
+            </div>
+            <div id="reservas-list"></div>
+          </div>
+
+          <!-- Tab: Criar Reserva -->
+          <div id="criar-tab" class="tab-content">
+            <form id="form-reserva">
+              <div class="form-group">
+                <label for="nomeCliente">Nome do Cliente *</label>
+                <input
+                  type="text"
+                  id="nomeCliente"
+                  name="nomeCliente"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="contatoCliente">Contato *</label>
+                <input
+                  type="text"
+                  id="contatoCliente"
+                  name="contatoCliente"
+                  placeholder="(00) 00000-0000"
+                  required
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="numeroMesa">Número da Mesa *</label>
+                  <select id="numeroMesa" name="numeroMesa" required>
+                    <option value="">Selecione...</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="quantidadePessoas">Pessoas *</label>
+                  <input
+                    type="number"
+                    id="quantidadePessoas"
+                    name="quantidadePessoas"
+                    min="1"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="dataHora">Data e Hora *</label>
+                  <input
+                    type="datetime-local"
+                    id="dataHora"
+                    name="dataHora"
+                    required
+                  />
+                  <small style="color: #666; font-size: 0.85em"
+                    >🕐 Horário de funcionamento: 12h às 23h</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="duracao">Duração (min)</label>
+                  <input
+                    type="number"
+                    id="duracao"
+                    name="duracao"
+                    value="90"
+                    min="30"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea
+                  id="observacoes"
+                  name="observacoes"
+                  rows="3"
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Criar Reserva
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Modal para detalhes da mesa -->
+    <div id="modal-mesa" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal para editar reserva -->
+    <div id="modal-editar" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Editar Reserva</h2>
+        <form id="form-editar-reserva">
+          <input type="hidden" id="edit-id" />
+          <div class="form-group">
+            <label for="edit-nomeCliente">Nome do Cliente *</label>
+            <input type="text" id="edit-nomeCliente" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-contatoCliente">Contato *</label>
+            <input type="text" id="edit-contatoCliente" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="edit-numeroMesa">Número da Mesa *</label>
+              <select id="edit-numeroMesa" required>
+                <option value="">Selecione...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit-quantidadePessoas">Pessoas *</label>
+              <input
+                type="number"
+                id="edit-quantidadePessoas"
+                min="1"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="edit-dataHora">Data e Hora *</label>
+              <input type="datetime-local" id="edit-dataHora" required />
+              <small style="color: #666; font-size: 0.85em"
+                >🕐 Horário de funcionamento: 12h às 23h</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="edit-duracao">Duração (min)</label>
+              <input type="number" id="edit-duracao" min="30" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-observacoes">Observações</label>
+            <textarea id="edit-observacoes" rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="fecharModalEditar()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
